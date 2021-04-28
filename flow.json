@@ -1,1 +1,453 @@
-[]
+[
+    {
+        "id": "a6b82347.d9912",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "66412505.db4d8c",
+        "type": "ui_group",
+        "name": "Standard2",
+        "tab": "916bd265.08c22",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "def6252.9510258",
+        "type": "ui_group",
+        "name": "Redes WIFI",
+        "tab": "916bd265.08c22",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "916bd265.08c22",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "af22b399.12614",
+        "type": "exec",
+        "z": "a6b82347.d9912",
+        "command": "vcgencmd measure_temp",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "",
+        "timer": "",
+        "name": "RPi Temp.",
+        "x": 490,
+        "y": 220,
+        "wires": [
+            [
+                "14f0a295.59181d"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "408435c9.447fec",
+        "type": "exec",
+        "z": "a6b82347.d9912",
+        "command": "top -d 0.5 -b -n2 | grep \"Cpu(s)\"|tail -n 1 | awk '{print $2 + $4}'",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "",
+        "timer": "",
+        "name": "CPU Load",
+        "x": 490,
+        "y": 320,
+        "wires": [
+            [
+                "40232629.6f05f8"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "8fbcbdf9.549b7",
+        "type": "exec",
+        "z": "a6b82347.d9912",
+        "command": "free | grep Mem | awk '{print 100*($4+$6+$7)/$2}'",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "",
+        "timer": "",
+        "name": "Free Memory",
+        "x": 500,
+        "y": 460,
+        "wires": [
+            [
+                "daf6433c.bad81"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "14f0a295.59181d",
+        "type": "function",
+        "z": "a6b82347.d9912",
+        "name": "",
+        "func": "str = msg.payload\nmsg.payload = str.substring(5,9);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 140,
+        "wires": [
+            [
+                "74ae361.8d5a648"
+            ]
+        ]
+    },
+    {
+        "id": "daf6433c.bad81",
+        "type": "function",
+        "z": "a6b82347.d9912",
+        "name": "",
+        "func": "str = msg.payload\nmsg.payload = parseInt(str.substring(0,str.length - 1));\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 440,
+        "wires": [
+            [
+                "71c6ede8.31e974"
+            ]
+        ]
+    },
+    {
+        "id": "cd08206d.f6016",
+        "type": "inject",
+        "z": "a6b82347.d9912",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 200,
+        "wires": [
+            [
+                "af22b399.12614"
+            ]
+        ]
+    },
+    {
+        "id": "74ae361.8d5a648",
+        "type": "ui_gauge",
+        "z": "a6b82347.d9912",
+        "name": "",
+        "group": "66412505.db4d8c",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "RPI Temp",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 1000,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "71c6ede8.31e974",
+        "type": "ui_gauge",
+        "z": "a6b82347.d9912",
+        "name": "",
+        "group": "66412505.db4d8c",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Free Memory",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 960,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "f30829d8.2a77f",
+        "type": "inject",
+        "z": "a6b82347.d9912",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 300,
+        "wires": [
+            [
+                "408435c9.447fec"
+            ]
+        ]
+    },
+    {
+        "id": "22793cf7.c85744",
+        "type": "inject",
+        "z": "a6b82347.d9912",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 420,
+        "wires": [
+            [
+                "8fbcbdf9.549b7"
+            ]
+        ]
+    },
+    {
+        "id": "40232629.6f05f8",
+        "type": "ui_gauge",
+        "z": "a6b82347.d9912",
+        "name": "",
+        "group": "66412505.db4d8c",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "CPU Load",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 850,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "9aadce65.c87758",
+        "type": "inject",
+        "z": "a6b82347.d9912",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 580,
+        "wires": [
+            [
+                "347e7af8.b97e9e"
+            ]
+        ]
+    },
+    {
+        "id": "347e7af8.b97e9e",
+        "type": "exec",
+        "z": "a6b82347.d9912",
+        "command": "sudo iwlist wlan0 scan|grep SSID",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "",
+        "x": 550,
+        "y": 600,
+        "wires": [
+            [
+                "175327e7.abdf3",
+                "b2f50764.c63f78"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "175327e7.abdf3",
+        "type": "ui_template",
+        "z": "a6b82347.d9912",
+        "group": "def6252.9510258",
+        "name": "",
+        "order": 3,
+        "width": "0",
+        "height": "0",
+        "format": "<div ng-bind-html=\"msg.payload\"></div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "x": 970,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b2f50764.c63f78",
+        "type": "debug",
+        "z": "a6b82347.d9912",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "ad3cf553.d64c18",
+        "type": "inject",
+        "z": "a6b82347.d9912",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 720,
+        "wires": [
+            [
+                "4790c0e.4543dc"
+            ]
+        ]
+    },
+    {
+        "id": "4790c0e.4543dc",
+        "type": "exec",
+        "z": "a6b82347.d9912",
+        "command": "ip -statistics link",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "",
+        "x": 570,
+        "y": 740,
+        "wires": [
+            [
+                "5de69fb8.934838"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "5de69fb8.934838",
+        "type": "debug",
+        "z": "a6b82347.d9912",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 760,
+        "wires": []
+    }
+]
